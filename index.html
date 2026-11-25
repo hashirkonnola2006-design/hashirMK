@@ -132,18 +132,25 @@
             </picture>
           </div>
 
-          <!-- Screen State B: About -->
-          <div class="tv-ui tv-ui-about" id="tv-ui-about">
-            <div class="tv-ui-chrome" aria-hidden="true">
-              <svg viewBox="0 0 36 24" width="14" height="10"><polygon points="8,2 14,2 8,22 2,22" fill="#fff"/><polygon points="18,2 24,2 18,22 12,22" fill="#fff"/><polygon points="28,2 34,2 28,22 22,22" fill="#fff"/></svg>
-              <div class="tv-ui-nav"><span>Work</span><span>About</span><span>Contact</span></div>
+          <!-- Screen State B: About (Photo -> Lag Glitch -> Name) -->
+          <div class="tv-ui tv-ui-about show-photo" id="tv-ui-about">
+            <picture class="tv-about-photo">
+              <source type="image/avif" srcset="assets/img/me-crt.avif">
+              <img src="assets/img/me-crt.webp" alt="Portrait of Hashir Muhiyudheen Konnola" class="tv-about-photo-img" decoding="async">
+            </picture>
+            <div class="tv-about-text-layer">
+              <div class="tv-ui-chrome" aria-hidden="true">
+                <svg viewBox="0 0 36 24" width="14" height="10"><polygon points="8,2 14,2 8,22 2,22" fill="#fff"/><polygon points="18,2 24,2 18,22 12,22" fill="#fff"/><polygon points="28,2 34,2 28,22 22,22" fill="#fff"/></svg>
+                <div class="tv-ui-nav"><span>Work</span><span>About</span><span>Contact</span></div>
+              </div>
+              <div class="tv-ui-about-body">
+                <p class="tv-about-name">Hashir<br>Muhiyudheen K</p>
+                <p class="tv-about-role">Web Developer &amp; Builder</p>
+                <button type="button" class="tv-explore-btn" id="about-explore-btn">Explore &rarr;</button>
+              </div>
+              <div class="tv-moon" aria-hidden="true"></div>
             </div>
-            <div class="tv-ui-about-body">
-              <p class="tv-about-name">Hashir<br>Muhiyudheen K</p>
-              <p class="tv-about-role">Web Developer &amp; Builder</p>
-              <button type="button" class="tv-explore-btn" id="about-explore-btn">Explore &rarr;</button>
-            </div>
-            <div class="tv-moon" aria-hidden="true"></div>
+            <div class="tv-glitch-bars" aria-hidden="true"></div>
           </div>
 
           <!-- Screen State C: Landed Projects -->
@@ -255,11 +262,18 @@
         <img src="assets/img/tv-hero-1200.webp" alt="" class="tv-cutout-img" loading="lazy" decoding="async">
         <div class="tv-screen-slot">
           <div class="crt-glass-fx"></div>
-          <div class="tv-ui tv-ui-about is-shown">
-            <div class="tv-ui-about-body">
-              <p class="tv-about-name">Hashir<br>Muhiyudheen K</p>
-              <p class="tv-about-role">Web Developer &amp; Builder</p>
+          <div class="tv-ui tv-ui-about is-shown show-photo" id="mobile-tv-ui-about">
+            <picture class="tv-about-photo">
+              <source type="image/avif" srcset="assets/img/me-crt.avif">
+              <img src="assets/img/me-crt.webp" alt="Portrait of Hashir Muhiyudheen Konnola" class="tv-about-photo-img" loading="lazy" decoding="async">
+            </picture>
+            <div class="tv-about-text-layer">
+              <div class="tv-ui-about-body">
+                <p class="tv-about-name">Hashir<br>Muhiyudheen K</p>
+                <p class="tv-about-role">Web Developer &amp; Builder</p>
+              </div>
             </div>
+            <div class="tv-glitch-bars" aria-hidden="true"></div>
           </div>
         </div>
       </div>

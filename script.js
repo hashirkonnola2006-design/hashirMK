@@ -58,8 +58,8 @@ const DEBRIS_LAYOUT = [
   { file: "shard-5",      depth: "far",  left: "11%",  top: "14%", width: "4vw",  rot: 15 },
   { file: "shard-6",      depth: "far",  left: "16%",  top: "43%", width: "4.5vw", rot: -32 },
   { file: "rock-4",       depth: "far",  left: "26%",  top: "72%", width: "5vw",  rot: 10 },
-  { file: "rock-5",       depth: "far",  left: "45%",  top: "68%", width: "4.5vw", rot: -18 },
-  { file: "rock-6",       depth: "far",  left: "60%",  top: "38%", width: "4vw",  rot: 28 },
+  { file: "rock-5",       depth: "far",  left: "41%",  top: "72%", width: "4.5vw", rot: -18 },
+  { file: "rock-6",       depth: "far",  left: "48%",  top: "48%", width: "3.8vw", rot: 28 },
   { file: "earbuds",      depth: "far",  left: "76%",  top: "88%", width: "9vw",  rot: -8 },
 ];
 
@@ -81,6 +81,8 @@ let webStrands = null;
 let particleEngine = null;
 let spiderSense = null;
 let swayTween = null;
+let aboutCycleTimer = null;
+let aboutSwapTimeout = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
   applyConfig();
@@ -268,6 +270,56 @@ function setTvScreenUi(mode) {
   document.getElementById("tv-ui-hero").classList.toggle("is-shown", mode === "hero");
   document.getElementById("tv-ui-about").classList.toggle("is-shown", mode === "about");
   document.getElementById("tv-ui-projects").classList.toggle("is-shown", mode === "projects");
+  if (mode === "about") startAboutScreenCycle(document.getElementById("tv-ui-about"));
+  else stopAboutScreenCycle();
+}
+
+function stopAboutScreenCycle() {
+  clearInterval(aboutCycleTimer);
+  clearTimeout(aboutSwapTimeout);
+  aboutCycleTimer = null;
+  aboutSwapTimeout = null;
+}
+
+function startAboutScreenCycle(aboutUiEl) {
+  stopAboutScreenCycle();
+  if (!aboutUiEl) return;
+
+  const setMode = (state) => {
+    aboutUiEl.classList.toggle("show-photo", state === "photo");
+    aboutUiEl.classList.toggle("show-name", state === "name");
+  };
+
+  let current = "photo";
+  setMode("photo");
+  if (prefersReduced()) return;
+
+  const triggerGlitchTo = (nextState) => {
+    aboutUiEl.classList.remove("is-lagging");
+    void aboutUiEl.offsetWidth;
+    aboutUiEl.classList.add("is-lagging");
+    // Lag stutter: brief mid-burst flickers before locking into target state
+    aboutSwapTimeout = setTimeout(() => {
+      setMode(nextState);
+      setTimeout(() => {
+        setMode(current);
+        setTimeout(() => {
+          current = nextState;
+          setMode(nextState);
+          aboutUiEl.classList.remove("is-lagging");
+        }, 85);
+      }, 65);
+    }, 150);
+  };
+
+  // First switch: Photo holds 1.5s -> lag/glitch into Name; then cycle smoothly
+  aboutSwapTimeout = setTimeout(() => {
+    triggerGlitchTo("name");
+    aboutCycleTimer = setInterval(() => {
+      if (document.hidden) return;
+      triggerGlitchTo(current === "name" ? "photo" : "name");
+    }, 3400);
+  }, 1500);
 }
 
 function startTvSway(sceneIdx) {
@@ -642,12 +694,17 @@ function initSceneControls() {
 function initMobileScrollObservers() {
   const sections = document.querySelectorAll(".scene");
   if (!("IntersectionObserver" in window)) return;
+  let mobileAboutStarted = false;
   const obs = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const idx = Number(entry.target.dataset.scene);
           updateActiveChrome(idx);
+          if (idx === 1 && !mobileAboutStarted) {
+            mobileAboutStarted = true;
+            startAboutScreenCycle(document.getElementById("mobile-tv-ui-about"));
+          }
         }
       });
     },
