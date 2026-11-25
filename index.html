@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hashir Muhiyudheen Konnola — Portfolio</title>
+  <meta name="description" content="Personal portfolio of Hashir Muhiyudheen Konnola — Full-stack developer building clean, fast web experiences.">
+  <meta property="og:title" content="Hashir Muhiyudheen Konnola — Portfolio">
+  <meta property="og:description" content="Full-stack developer building clean, fast web experiences.">
+  <meta property="og:image" content="assets/img/og-image.jpg">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 24'%3E%3Crect width='36' height='24' fill='%23000'/%3E%3Cpolygon points='8,3 13,3 8,21 3,21' fill='%23fff'/%3E%3Cpolygon points='17,3 22,3 17,21 12,21' fill='%23fff'/%3E%3Cpolygon points='26,3 31,3 26,21 21,21' fill='%23ff3b30'/%3E%3C/svg%3E">
+
+  <!-- Preload Hero Critical Assets -->
+  <link rel="preload" as="image" href="assets/img/hero-plate-1920.webp" imagesrcset="assets/img/hero-plate-1280.webp 1280w, assets/img/hero-plate-1920.webp 1920w, assets/img/hero-plate-2560.webp 2560w, assets/img/hero-plate-3840.webp 3840w" imagesizes="100vw">
+  <link rel="preload" as="image" href="assets/img/tv-hero-1200.webp" imagesrcset="assets/img/tv-hero-1200.webp 1200w, assets/img/tv-hero-2400.webp 2400w" imagesizes="(max-width: 899px) 78vw, 34vw">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Initial "TUNING IN..." Loader -->
+  <div class="tuning-loader" id="tuning-loader" role="status" aria-live="polite">
+    <p class="tuning-text">TUNING IN...</p>
+    <div class="tuning-track" aria-hidden="true">
+      <div class="tuning-bar" id="tuning-bar"></div>
+    </div>
+  </div>
+
+  <!-- Global Atmospheric Overlays (all pointer-events: none) -->
+  <div class="fx-grain" aria-hidden="true"></div>
+  <div class="fx-vignette" aria-hidden="true"></div>
+  <div class="fx-motion-blur" id="fx-motion-blur" aria-hidden="true"></div>
+  <div class="fx-channel-tear" id="fx-channel-tear" aria-hidden="true"></div>
+  <div class="fx-impact-flash" id="fx-impact-flash" aria-hidden="true"></div>
+  <canvas class="fx-particles-canvas" id="fx-particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- Fixed Minimal Navbar -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#hero" class="nav-brand" data-jump="0" aria-label="Hashir Muhiyudheen Konnola — Home">
+        <svg class="brand-mark" viewBox="0 0 36 24" width="32" height="22" aria-hidden="true">
+          <polygon points="8,2 14,2 8,22 2,22" fill="currentColor"/>
+          <polygon points="18,2 24,2 18,22 12,22" fill="currentColor"/>
+          <polygon points="28,2 34,2 28,22 22,22" fill="currentColor"/>
+        </svg>
+        <span class="sr-only" data-site-name>Hashir Muhiyudheen Konnola</span>
+      </a>
+
+      <button
+        type="button"
+        class="nav-toggle"
+        id="nav-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+        aria-controls="nav-menu"
+      >
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+
+      <nav class="nav-links" id="nav-menu" aria-label="Primary navigation">
+        <a href="#about" class="nav-link" data-jump="1">
+          <span class="nav-dot" aria-hidden="true"></span>About
+        </a>
+        <a href="#projects" class="nav-link" data-jump="2">
+          <span class="nav-dot" aria-hidden="true"></span>Work
+        </a>
+        <a href="#contact" class="nav-link" data-jump="3">
+          <span class="nav-dot" aria-hidden="true"></span>Contact
+        </a>
+        <a href="#contact" class="nav-pill" data-jump="3">Let's Talk &rarr;</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Right-edge Scene Dots (01-04) -->
+  <nav class="scene-dots" id="scene-dots" aria-label="Scene navigation">
+    <button type="button" class="scene-dot is-active" data-jump="0" aria-label="Scene 01: Hero">
+      <span class="scene-dot-label">01 HERO</span>
+      <span class="scene-dot-pip" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="scene-dot" data-jump="1" aria-label="Scene 02: About">
+      <span class="scene-dot-label">02 ABOUT</span>
+      <span class="scene-dot-pip" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="scene-dot" data-jump="2" aria-label="Scene 03: Projects">
+      <span class="scene-dot-label">03 WORK</span>
+      <span class="scene-dot-pip" aria-hidden="true"></span>
+    </button>
+    <button type="button" class="scene-dot" data-jump="3" aria-label="Scene 04: Contact">
+      <span class="scene-dot-label">04 CONTACT</span>
+      <span class="scene-dot-pip" aria-hidden="true"></span>
+    </button>
+  </nav>
+
+  <!-- Debug Mode HUD (?debug=1) -->
+  <div class="debug-hud" id="debug-hud" hidden></div>
+
+  <!-- Main Stage Viewport -->
+  <main class="stage-viewport" id="stage-viewport">
+    <!-- Persistent Desktop TV Actor (flies seamlessly across Hero -> About -> Projects) -->
+    <div class="tv-actor" id="tv-actor" aria-hidden="true">
+      <div class="tv-actor-3d" id="tv-actor-3d">
+        <picture>
+          <source type="image/avif" srcset="assets/img/tv-hero-1200.avif 1200w, assets/img/tv-hero-2400.avif 2400w" sizes="36vw">
+          <source type="image/webp" srcset="assets/img/tv-hero-1200.webp 1200w, assets/img/tv-hero-2400.webp 2400w" sizes="36vw">
+          <img src="assets/img/tv-hero-1200.webp" alt="" class="tv-cutout-img" id="tv-actor-img" decoding="async">
+        </picture>
+
+        <!-- Dynamic Screen Overlay inside the TV Bezel -->
+        <div class="tv-screen-slot" id="tv-actor-screen">
+          <div class="crt-turnon-line" id="hero-crt-line"></div>
+          <div class="crt-glass-fx" aria-hidden="true"></div>
+
+          <!-- Screen State A: Hero -->
+          <div class="tv-ui tv-ui-hero" id="tv-ui-hero">
+            <div class="tv-ui-chrome" aria-hidden="true">
+              <svg viewBox="0 0 36 24" width="16" height="11"><polygon points="8,2 14,2 8,22 2,22" fill="#fff"/><polygon points="18,2 24,2 18,22 12,22" fill="#fff"/><polygon points="28,2 34,2 28,22 22,22" fill="#fff"/></svg>
+              <div class="tv-ui-nav"><span>Work</span><span>About</span><span>Contact</span></div>
+            </div>
+            <div class="tv-ui-hero-body">
+              <p class="tv-hero-word">HASHIR</p>
+              <p class="tv-hero-sub">Full-stack developer</p>
+              <button type="button" class="tv-explore-btn" id="hero-explore-btn">Explore &rarr;</button>
+            </div>
+            <picture class="tv-skyline-pic">
+              <source type="image/avif" srcset="assets/img/tv-skyline.avif">
+              <img src="assets/img/tv-skyline.webp" alt="" class="tv-skyline" aria-hidden="true" decoding="async">
+            </picture>
+          </div>
+
+          <!-- Screen State B: About -->
+          <div class="tv-ui tv-ui-about" id="tv-ui-about">
+            <div class="tv-ui-chrome" aria-hidden="true">
+              <svg viewBox="0 0 36 24" width="14" height="10"><polygon points="8,2 14,2 8,22 2,22" fill="#fff"/><polygon points="18,2 24,2 18,22 12,22" fill="#fff"/><polygon points="28,2 34,2 28,22 22,22" fill="#fff"/></svg>
+              <div class="tv-ui-nav"><span>Work</span><span>About</span><span>Contact</span></div>
+            </div>
+            <div class="tv-ui-about-body">
+              <p class="tv-about-name">Hashir<br>Muhiyudheen K</p>
+              <p class="tv-about-role">Web Developer &amp; Builder</p>
+              <button type="button" class="tv-explore-btn" id="about-explore-btn">Explore &rarr;</button>
+            </div>
+            <div class="tv-moon" aria-hidden="true"></div>
+          </div>
+
+          <!-- Screen State C: Landed Projects -->
+          <div class="tv-ui tv-ui-projects" id="tv-ui-projects">
+            <div class="tv-ui-chrome" aria-hidden="true">
+              <svg viewBox="0 0 36 24" width="14" height="10"><polygon points="8,2 14,2 8,22 2,22" fill="#fff"/><polygon points="18,2 24,2 18,22 12,22" fill="#fff"/><polygon points="28,2 34,2 28,22 22,22" fill="#fff"/></svg>
+            </div>
+            <div class="tv-ui-projects-body">
+              <p class="tv-projects-label">My Projects</p>
+              <button type="button" class="tv-explore-btn" id="tv-viewall-btn">View All &rarr;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blue Spider-Sense Squiggly Lines (visible during transitions & About) -->
+        <svg class="spider-sense-svg" id="spider-sense-svg" viewBox="-120 -120 640 560" aria-hidden="true">
+          <defs>
+            <filter id="sense-glow" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <g class="sense-strokes" filter="url(#sense-glow)" fill="none" stroke="var(--sense)" stroke-width="3.2" stroke-linecap="round">
+            <path class="sense-path" d="M 80,-24 Q 72,-54 92,-76"/>
+            <path class="sense-path" d="M 300,-22 Q 326,-48 348,-66"/>
+            <path class="sense-path" d="M 382,42 Q 424,22 456,36"/>
+            <path class="sense-path" d="M 412,130 Q 452,118 486,138"/>
+            <path class="sense-path" d="M 396,222 Q 436,248 468,272"/>
+            <path class="sense-path" d="M -22,68 Q -64,52 -94,68"/>
+            <path class="sense-path" d="M -28,158 Q -74,166 -98,192"/>
+            <path class="sense-path" d="M -12,238 Q -52,262 -76,288"/>
+            <path class="sense-path" d="M 190,-38 Q 202,-72 216,-94"/>
+            <path class="sense-path" d="M 190,348 Q 204,378 194,408"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         SCENE 1: HERO
+         ====================================================================== -->
+    <section class="scene scene-hero is-active" id="hero" data-scene="0" aria-labelledby="hero-seo-title">
+      <h1 id="hero-seo-title" class="sr-only" data-site-name>Hashir Muhiyudheen Konnola</h1>
+
+      <picture class="plate-picture">
+        <source type="image/avif" srcset="assets/img/hero-plate-1280.avif 1280w, assets/img/hero-plate-1920.avif 1920w, assets/img/hero-plate-2560.avif 2560w, assets/img/hero-plate-3840.avif 3840w" sizes="100vw">
+        <source type="image/webp" srcset="assets/img/hero-plate-1280.webp 1280w, assets/img/hero-plate-1920.webp 1920w, assets/img/hero-plate-2560.webp 2560w, assets/img/hero-plate-3840.webp 3840w" sizes="100vw">
+        <img src="assets/img/hero-plate-1920.webp" alt="Dark noir room lit by a spotlight beam with vintage props on a wet glossy floor" class="plate-img plate-hero">
+      </picture>
+
+      <!-- Verlet Spider-Silk Web Strands -->
+      <canvas class="web-strands-canvas" id="web-strands-canvas" aria-hidden="true"></canvas>
+
+      <!-- Mobile-only Hero TV (desktop uses persistent #tv-actor) -->
+      <div class="mobile-hero-tv" aria-hidden="true">
+        <img src="assets/img/tv-hero-1200.webp" alt="" class="tv-cutout-img">
+        <div class="tv-screen-slot">
+          <div class="crt-glass-fx"></div>
+          <div class="tv-ui tv-ui-hero is-shown">
+            <div class="tv-ui-hero-body">
+              <p class="tv-hero-word">HASHIR</p>
+              <p class="tv-hero-sub">Full-stack developer</p>
+              <a href="#about" class="tv-explore-btn">Explore &rarr;</a>
+            </div>
+            <img src="assets/img/tv-skyline.webp" alt="" class="tv-skyline" aria-hidden="true" decoding="async">
+          </div>
+        </div>
+      </div>
+
+      <!-- Mono OSD -->
+      <div class="osd-rec" aria-hidden="true">
+        <span class="rec-dot"></span>
+        <span>REC</span>
+        <span id="rec-timecode">00:00:00</span>
+      </div>
+      <span class="osd-ch" aria-hidden="true">CH 00</span>
+      <button type="button" class="osd-scroll" id="hero-scroll-hint" data-jump="1" aria-label="Scroll to About">
+        SCROLL &darr;
+      </button>
+    </section>
+
+    <!-- ======================================================================
+         SCENE 2: ABOUT
+         ====================================================================== -->
+    <section class="scene scene-about" id="about" data-scene="1" aria-labelledby="about-heading">
+      <picture class="plate-picture">
+        <source type="image/avif" srcset="assets/img/about-plate-1280.avif 1280w, assets/img/about-plate-1920.avif 1920w, assets/img/about-plate-2560.avif 2560w, assets/img/about-plate-3840.avif 3840w" sizes="100vw">
+        <source type="image/webp" srcset="assets/img/about-plate-1280.webp 1280w, assets/img/about-plate-1920.webp 1920w, assets/img/about-plate-2560.webp 2560w, assets/img/about-plate-3840.webp 3840w" sizes="100vw">
+        <img src="assets/img/about-plate-1920.webp" alt="" class="plate-img plate-about" loading="lazy" decoding="async">
+      </picture>
+
+      <!-- Multi-depth Floating Debris Parallax Layers -->
+      <div class="debris-field" id="debris-field" aria-hidden="true"></div>
+
+      <!-- Mobile-only About TV -->
+      <div class="mobile-about-tv" aria-hidden="true">
+        <svg class="spider-sense-svg mobile-sense-svg" viewBox="-120 -120 640 560" aria-hidden="true">
+          <g fill="none" stroke="var(--sense)" stroke-width="3.6" stroke-linecap="round">
+            <path class="mobile-sense-path" d="M 80,-24 Q 72,-54 92,-76"/>
+            <path class="mobile-sense-path" d="M 300,-22 Q 326,-48 348,-66"/>
+            <path class="mobile-sense-path" d="M 382,42 Q 424,22 456,36"/>
+            <path class="mobile-sense-path" d="M 412,130 Q 452,118 486,138"/>
+            <path class="mobile-sense-path" d="M -22,68 Q -64,52 -94,68"/>
+            <path class="mobile-sense-path" d="M -28,158 Q -74,166 -98,192"/>
+            <path class="mobile-sense-path" d="M -12,238 Q -52,262 -76,288"/>
+            <path class="mobile-sense-path" d="M 190,-38 Q 202,-72 216,-94"/>
+          </g>
+        </svg>
+        <img src="assets/img/tv-hero-1200.webp" alt="" class="tv-cutout-img" loading="lazy" decoding="async">
+        <div class="tv-screen-slot">
+          <div class="crt-glass-fx"></div>
+          <div class="tv-ui tv-ui-about is-shown">
+            <div class="tv-ui-about-body">
+              <p class="tv-about-name">Hashir<br>Muhiyudheen K</p>
+              <p class="tv-about-role">Web Developer &amp; Builder</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Minimal Text Block on the Right -->
+      <div class="about-copy" id="about-copy">
+        <div class="about-eyebrow-row">
+          <span class="about-eyebrow">ABOUT ME</span>
+          <span class="about-rule" aria-hidden="true"></span>
+        </div>
+        <h2 id="about-heading" class="about-heading">Hi, I'm<br>Hashir.</h2>
+        <p class="about-body" id="about-paragraph">
+          A B.Tech Computer Science student building real products with code, creativity and a bit of chaos.
+        </p>
+        <p class="about-meta" id="about-meta">FULL-STACK &middot; 12 LIVE PROJECTS &middot; BACKEND TO UI</p>
+        <button type="button" class="pill-btn" id="know-more-btn">Know More &rarr;</button>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SCENE 3: PROJECTS
+         ====================================================================== -->
+    <section class="scene scene-projects" id="projects" data-scene="2" aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="sr-only">Selected Work</h2>
+
+      <!-- Desktop 16:9 Stage with 12 Pile TVs + Landing Spot -->
+      <div class="pile-stage-wrap" id="pile-stage-wrap">
+        <div class="pile-stage" id="pile-stage">
+          <picture class="pile-plate-pic">
+            <source type="image/avif" srcset="assets/img/pile-plate-1280.avif 1280w, assets/img/pile-plate-1920.avif 1920w, assets/img/pile-plate-2560.avif 2560w, assets/img/pile-plate-3840.avif 3840w" sizes="100vw">
+            <source type="image/webp" srcset="assets/img/pile-plate-1280.webp 1280w, assets/img/pile-plate-1920.webp 1920w, assets/img/pile-plate-2560.webp 2560w, assets/img/pile-plate-3840.webp 3840w" sizes="100vw">
+            <img src="assets/img/pile-plate-1920.webp" alt="Pyramid stack of 12 vintage CRT televisions in a dark foggy room" class="pile-plate-img" loading="lazy" decoding="async">
+          </picture>
+
+          <!-- 12 Project Screen Hotspots injected by script.js -->
+          <div class="pile-hotspots-layer" id="pile-hotspots-layer"></div>
+
+          <!-- Landing Spot at Lower-Right for the 13th TV (REF-3 exact pose) -->
+          <button
+            type="button"
+            class="pile-landing-tv"
+            id="pile-landing-tv"
+            aria-label="Open project directory — View All 12 Projects"
+          >
+            <img src="assets/img/tv-hero-1200.webp" alt="" class="tv-cutout-img" loading="lazy" decoding="async">
+            <div class="tv-screen-slot">
+              <div class="crt-glass-fx"></div>
+              <div class="tv-ui tv-ui-projects is-shown">
+                <div class="tv-ui-chrome" aria-hidden="true">
+                  <svg viewBox="0 0 36 24" width="12" height="8"><polygon points="8,2 14,2 8,22 2,22" fill="#fff"/><polygon points="18,2 24,2 18,22 12,22" fill="#fff"/><polygon points="28,2 34,2 28,22 22,22" fill="#fff"/></svg>
+                </div>
+                <div class="tv-ui-projects-body">
+                  <p class="tv-projects-label">My Projects</p>
+                  <span class="tv-explore-btn">View All &rarr;</span>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <div class="pile-hover-label" id="pile-hover-label" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- Mobile (< 900px) 2-Column CRT Grid -->
+      <div class="mobile-projects-wrap" id="mobile-projects-wrap">
+        <div class="mobile-projects-header">
+          <p class="about-eyebrow">CH 01-12</p>
+          <h2 class="mobile-projects-title">My Projects</h2>
+        </div>
+        <div class="mobile-projects-grid" id="mobile-projects-grid"></div>
+      </div>
+
+      <!-- Visually Hidden Accessible Project List -->
+      <ul class="sr-only" id="sr-project-list" aria-label="All 12 projects"></ul>
+    </section>
+
+    <!-- ======================================================================
+         SCENE 4: CONTACT
+         ====================================================================== -->
+    <section class="scene scene-contact" id="contact" data-scene="3" aria-labelledby="contact-heading">
+      <picture class="plate-picture">
+        <source type="image/avif" srcset="assets/img/contact-plate-1280.avif 1280w, assets/img/contact-plate-1920.avif 1920w, assets/img/contact-plate-2560.avif 2560w, assets/img/contact-plate-3840.avif 3840w" sizes="100vw">
+        <source type="image/webp" srcset="assets/img/contact-plate-1280.webp 1280w, assets/img/contact-plate-1920.webp 1920w, assets/img/contact-plate-2560.webp 2560w, assets/img/contact-plate-3840.webp 3840w" sizes="100vw">
+        <img src="assets/img/contact-plate-1920.webp" alt="" class="plate-img plate-contact" loading="lazy" decoding="async">
+      </picture>
+
+      <div class="contact-shell">
+        <div class="contact-header">
+          <p class="about-eyebrow">TRANSMISSION</p>
+          <h2 id="contact-heading" class="contact-title">Let's work together</h2>
+        </div>
+
+        <div class="contact-grid">
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="form-field">
+              <label for="contact-name" class="form-label">Name</label>
+              <input type="text" id="contact-name" name="name" class="form-input" placeholder="Your name" autocomplete="name" required>
+            </div>
+            <div class="form-field">
+              <label for="contact-email" class="form-label">Email</label>
+              <input type="email" id="contact-email" name="email" class="form-input" placeholder="you@example.com" autocomplete="email" required>
+            </div>
+            <div class="form-field">
+              <label for="contact-message" class="form-label">Message</label>
+              <textarea id="contact-message" name="message" class="form-input form-textarea" placeholder="Tell me about your project" rows="3" required></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn-send" id="contact-submit">Send</button>
+              <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+
+          <aside class="contact-info" aria-label="Direct contact and social links">
+            <div class="contact-block">
+              <p class="about-eyebrow">Email</p>
+              <a href="mailto:hashirkonnola2006@gmail.com" class="text-link" id="contact-email-link">hashirkonnola2006@gmail.com</a>
+            </div>
+            <div class="contact-block">
+              <p class="about-eyebrow">Phone</p>
+              <a href="tel:7012999011" class="text-link" id="contact-phone-link">7012999011</a>
+            </div>
+            <div class="contact-block">
+              <p class="about-eyebrow">Elsewhere</p>
+              <ul class="social-list">
+                <li><a href="https://github.com/hashirkonnola2006-design" target="_blank" rel="noopener noreferrer" class="text-link" id="link-github">GitHub</a></li>
+                <li><a href="https://www.linkedin.com/in/hashir-muhiyudheen-konnola-8342aa1b9/" target="_blank" rel="noopener noreferrer" class="text-link" id="link-linkedin">LinkedIn</a></li>
+                <li><a href="https://www.instagram.com/m.hashirr_/" target="_blank" rel="noopener noreferrer" class="text-link" id="link-instagram">Instagram</a></li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+
+        <footer class="footer">
+          <p class="footer-text">&copy; 2026 <span data-site-name>Hashir Muhiyudheen Konnola</span> / END OF TRANSMISSION</p>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Minimal Slide-In Panel ("Know More →") -->
+  <div class="drawer" id="know-more-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+    <aside class="drawer-panel">
+      <button type="button" class="icon-btn drawer-close" id="drawer-close" aria-label="Close panel">&times;</button>
+      <p class="about-eyebrow">DOSSIER</p>
+      <h3 id="drawer-title" class="drawer-title" data-site-name>Hashir Muhiyudheen Konnola</h3>
+      <ul class="drawer-lines" id="drawer-lines"></ul>
+      <div class="drawer-links" id="drawer-links"></div>
+    </aside>
+  </div>
+
+  <!-- Index Overlay ("My Projects / View All →") -->
+  <div class="index-overlay" id="index-overlay" role="dialog" aria-modal="true" aria-labelledby="index-overlay-title" hidden>
+    <div class="index-backdrop" id="index-backdrop"></div>
+    <div class="index-shell">
+      <div class="index-header">
+        <div>
+          <p class="about-eyebrow">CHANNEL DIRECTORY</p>
+          <h3 id="index-overlay-title" class="index-title">All Projects (01–12)</h3>
+        </div>
+        <button type="button" class="icon-btn" id="index-close" aria-label="Close directory">&times;</button>
+      </div>
+      <div class="index-body">
+        <ul class="index-list" id="index-list"></ul>
+        <div class="index-preview" aria-hidden="true">
+          <img src="assets/projects/project1.webp" alt="" id="index-preview-img">
+          <div class="crt-glass-fx"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-Screen Project Viewer Modal -->
+  <div class="modal" id="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" hidden>
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-container" id="modal-container">
+      <div class="modal-crt-flash" id="modal-crt-flash" aria-hidden="true"></div>
+      <div class="modal-topbar">
+        <div class="modal-meta">
+          <p class="modal-counter" id="modal-counter">01 / 12</p>
+          <h3 id="modal-title" class="modal-title"></h3>
+          <p id="modal-description" class="modal-description"></p>
+        </div>
+        <div class="modal-controls">
+          <button type="button" class="icon-btn" id="modal-prev" aria-label="Previous project">&larr;</button>
+          <button type="button" class="icon-btn" id="modal-next" aria-label="Next project">&rarr;</button>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn-visit" id="modal-visit">Visit project &rarr;</a>
+          <button type="button" class="icon-btn" id="modal-close" aria-label="Close modal">&times;</button>
+        </div>
+      </div>
+      <div class="modal-media-scroll" id="modal-media-scroll" tabindex="0">
+        <img src="" alt="" class="modal-image" id="modal-image">
+        <div class="crt-glass-fx" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
