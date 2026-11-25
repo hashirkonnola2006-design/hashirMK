@@ -18,15 +18,42 @@ const SITE_CONFIG = {
   },
 };
 
-const ABOUT_COPY = {
-  heading: "Hi, I'm\nHashir.",
-  paragraph: "A B.Tech Computer Science student building real products with code, creativity and a bit of chaos.",
-  meta: "FULL-STACK · 12 LIVE PROJECTS · BACKEND TO UI",
-  dossierLines: [
-    "B.Tech, Computer Science",
-    "I build full-stack web apps, from the backend API to the interface",
-    "I built the backend of a four-person team project",
+const ABOUT = {
+  label: "ABOUT ME",
+  heading: "Self-taught.\nAlways shipping.",
+  paragraph1:
+    "Second-year B.Tech Computer Science student at the College of Engineering Thalassery, Kerala. Most of what I know about coding didn't come from a classroom. It's self-taught, by building real web apps, documenting the process publicly and working closely with AI developer tools.",
+  paragraph2Before: "On the side I build freelance projects for clients, including ",
+  link1: { label: "Mandhi Resto", projectIndex: 4 },
+  paragraph2Middle: ", a digital restaurant menu, and ",
+  link2: { label: "KTU PrepHub", projectIndex: 0 },
+  paragraph2After: ", an academic resources platform used by university students.",
+  nowLabel: "NOW",
+  nowMain:
+    "Building cleaner interfaces and teaching myself more backend systems, for larger and more reliable codebases.",
+  nowMuted:
+    "The goal stays simple: build tools that work well, keep shipping code, and learn as I go.",
+  stats: [
+    { target: 12, suffix: "", label: "LIVE PROJECTS" },
+    { target: 3, suffix: "+", label: "MAJOR PROJECTS" },
+    { target: 12, suffix: "+", label: "TECHS & TOOLS" },
   ],
+  expertiseLabel: "TECHNICAL EXPERTISE",
+  expertise: [
+    {
+      group: "FRONTEND",
+      items: ["HTML5", "CSS3", "JavaScript (ES6+)", "React.js", "Next.js", "Responsive Design"],
+    },
+    {
+      group: "BACKEND & DATABASE",
+      items: ["Node.js", "Express.js", "REST APIs", "JSON Databases", "Lowdb"],
+    },
+    {
+      group: "WORKFLOW & DEPLOY",
+      items: ["Git & GitHub", "npm / Node Package Manager", "Vercel hosting", "Chrome DevTools"],
+    },
+  ],
+  ctaLabel: "See my work →",
 };
 
 const PROJECTS = [
@@ -44,23 +71,24 @@ const PROJECTS = [
   { id: 12, title: "Terracode",                      description: "Interactive climate storytelling experience exploring rising ocean levels.",             image: "assets/projects/project12.webp", url: "https://terracode-sand.vercel.app/" },
 ];
 
+/* Debris kept on left half & edge bands; newspaper blurred behind scrim top-right, can bottom-right */
 const DEBRIS_LAYOUT = [
-  { file: "broken-clock", depth: "near", left: "-4%",  top: "64%", width: "26vw", rot: -16 },
-  { file: "shard-1",      depth: "near", left: "4%",   top: "4%",  width: "13vw", rot: 22 },
-  { file: "rock-1",       depth: "near", left: "38%",  top: "84%", width: "16vw", rot: -12 },
-  { file: "newspaper",    depth: "mid",  left: "84%",  top: "4%",  width: "16vw", rot: 14 },
-  { file: "crushed-can",  depth: "mid",  left: "82%",  top: "78%", width: "11vw", rot: -20 },
-  { file: "shard-2",      depth: "mid",  left: "2%",   top: "29%", width: "8vw",  rot: 48 },
-  { file: "shard-3",      depth: "mid",  left: "47%",  top: "14%", width: "6.5vw", rot: -18 },
-  { file: "shard-4",      depth: "mid",  left: "68%",  top: "78%", width: "7vw",  rot: 30 },
-  { file: "rock-2",       depth: "mid",  left: "52%",  top: "86%", width: "11vw", rot: 16 },
-  { file: "rock-3",       depth: "mid",  left: "43%",  top: "18%", width: "5vw",  rot: -25 },
-  { file: "shard-5",      depth: "far",  left: "11%",  top: "14%", width: "4vw",  rot: 15 },
-  { file: "shard-6",      depth: "far",  left: "16%",  top: "43%", width: "4.5vw", rot: -32 },
-  { file: "rock-4",       depth: "far",  left: "26%",  top: "72%", width: "5vw",  rot: 10 },
-  { file: "rock-5",       depth: "far",  left: "41%",  top: "72%", width: "4.5vw", rot: -18 },
-  { file: "rock-6",       depth: "far",  left: "48%",  top: "48%", width: "3.8vw", rot: 28 },
-  { file: "earbuds",      depth: "far",  left: "76%",  top: "88%", width: "9vw",  rot: -8 },
+  { file: "broken-clock", depth: "near", left: "-4%",  top: "66%", width: "24vw", rot: -16 },
+  { file: "shard-1",      depth: "near", left: "3%",   top: "5%",  width: "12vw", rot: 22 },
+  { file: "rock-1",       depth: "near", left: "32%",  top: "85%", width: "14vw", rot: -12 },
+  { file: "newspaper",    depth: "mid",  left: "88%",  top: "-4%", width: "15vw", rot: 14, extraClass: "debris-bg-newspaper" },
+  { file: "crushed-can",  depth: "mid",  left: "89%",  top: "84%", width: "9vw",  rot: -20, extraClass: "debris-bg-can" },
+  { file: "shard-2",      depth: "mid",  left: "2%",   top: "30%", width: "7.5vw", rot: 48 },
+  { file: "shard-3",      depth: "mid",  left: "41%",  top: "10%", width: "6vw",  rot: -18 },
+  { file: "shard-4",      depth: "mid",  left: "44%",  top: "82%", width: "6.5vw", rot: 30 },
+  { file: "rock-2",       depth: "mid",  left: "18%",  top: "86%", width: "10vw", rot: 16 },
+  { file: "rock-3",       depth: "mid",  left: "39%",  top: "18%", width: "4.5vw", rot: -25 },
+  { file: "shard-5",      depth: "far",  left: "9%",   top: "15%", width: "3.8vw", rot: 15 },
+  { file: "shard-6",      depth: "far",  left: "12%",  top: "46%", width: "4vw",  rot: -32 },
+  { file: "rock-4",       depth: "far",  left: "23%",  top: "74%", width: "4.5vw", rot: 10 },
+  { file: "rock-5",       depth: "far",  left: "38%",  top: "72%", width: "4vw",  rot: -18 },
+  { file: "rock-6",       depth: "far",  left: "44%",  top: "48%", width: "3.5vw", rot: 28 },
+  { file: "earbuds",      depth: "far",  left: "46%",  top: "90%", width: "8vw",  rot: -8 },
 ];
 
 /* ==========================================================================
@@ -100,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await buildPileHotspots();
   buildMobileProjectsGrid();
   buildAccessibleProjectList();
-  buildKnowMoreDrawer();
+  initAboutSection();
   buildIndexOverlay();
   initModal();
   initContactForm();
@@ -121,9 +149,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 function applyConfig() {
   document.title = `${SITE_CONFIG.name} — Portfolio`;
   document.querySelectorAll("[data-site-name]").forEach((el) => { el.textContent = SITE_CONFIG.name; });
-  document.getElementById("about-heading").innerHTML = ABOUT_COPY.heading.replace("\n", "<br>");
-  document.getElementById("about-paragraph").textContent = ABOUT_COPY.paragraph;
-  document.getElementById("about-meta").textContent = ABOUT_COPY.meta;
 
   const emailEl = document.getElementById("contact-email-link");
   if (emailEl) { emailEl.textContent = SITE_CONFIG.email; emailEl.href = `mailto:${SITE_CONFIG.email}`; }
@@ -237,10 +262,10 @@ function getPoseMetrics(sceneIdx) {
     };
   }
   if (sceneIdx === 1) {
-    const width = Math.min(vw * 0.36, vh * 0.64);
+    const width = Math.min(vw * 0.305, vh * 0.54);
     return {
-      left: vw * 0.16,
-      top: vh * 0.21,
+      left: vw * 0.30 - width * 0.5,
+      top: vh * 0.24,
       width,
       rotateZ: -18,
       rotateY: 24,
@@ -385,6 +410,7 @@ function jumpToSceneImmediate(idx) {
     spiderSense.show();
     if (landedTv) landedTv.classList.add("is-hidden-during-flight");
     startTvSway(1);
+    updateAboutScrollMask();
   } else if (idx === 2) {
     webStrands.stop();
     spiderSense.hide();
@@ -458,6 +484,10 @@ function runT1(isReverse, rate) {
     },
   });
 
+  const aboutRule = document.getElementById("about-rule");
+  const aboutBlocks = aboutCopy.querySelectorAll(".about-block");
+  const aboutChips = aboutCopy.querySelectorAll(".expertise-chip");
+
   if (!isReverse) {
     tl.call(() => { webStrands.setTension(2.4); spiderSense.flashFast(); }, null, 0)
       .to(actor3d, { x: 4, duration: 0.05, repeat: 5, yoyo: true }, 0)
@@ -468,9 +498,12 @@ function runT1(isReverse, rate) {
       .to(aboutSec, { opacity: 1, duration: 0.85, ease: "power2.out" }, 0.6)
       .to(actor, { left: aboutPose.left, top: aboutPose.top, width: aboutPose.width, duration: 1.05, ease: "power3.inOut" }, 0.5)
       .to(actor3d, { rotationZ: aboutPose.rotateZ, rotationY: aboutPose.rotateY, rotationX: aboutPose.rotateX, x: 0, y: 0, duration: 1.05, ease: "power3.inOut" }, 0.5)
-      .call(() => setTvScreenUi("about"), null, 0.85)
+      .call(() => { setTvScreenUi("about"); updateAboutScrollMask(); }, null, 0.85)
       .fromTo(debris, { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, stagger: 0.03, ease: "power2.out" }, 0.65)
-      .fromTo(aboutCopy.children, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: "power3.out" }, 0.85)
+      .fromTo(aboutRule, { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power2.out" }, 0.82)
+      .fromTo(aboutBlocks, { x: 24, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, stagger: 0.07, ease: "power3.out" }, 0.80)
+      .call(() => animateAboutStatsOnce(), null, 0.98)
+      .fromTo(aboutChips, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.22, stagger: 0.018, ease: "power2.out" }, 1.04)
       .to(blurFx, { opacity: 0, duration: 0.3 }, 1.25);
   } else {
     tl.to("#fx-channel-tear", { opacity: 0.45, duration: 0.12, yoyo: true, repeat: 1 }, 0)
@@ -625,7 +658,6 @@ function runDirectChannelJump(targetIdx) {
 function isOverlayOpen() {
   return (
     !document.getElementById("project-modal").hidden ||
-    !document.getElementById("know-more-drawer").hidden ||
     !document.getElementById("index-overlay").hidden
   );
 }
@@ -653,8 +685,25 @@ function initSceneControls() {
 
   let wheelAcc = 0;
   let wheelTimer = null;
+  const canAboutScrollInDir = (dir) => {
+    if (currentScene !== 1) return false;
+    const col = document.getElementById("about-copy");
+    if (!col || col.scrollHeight <= col.clientHeight + 2) return false;
+    if (dir > 0) return col.scrollTop + col.clientHeight < col.scrollHeight - 2;
+    return col.scrollTop > 2;
+  };
+
   window.addEventListener("wheel", (e) => {
     if (!isDesktopStage() || isTransitioning || isOverlayOpen()) return;
+    if (canAboutScrollInDir(e.deltaY)) {
+      wheelAcc = 0;
+      const col = document.getElementById("about-copy");
+      if (col && !col.contains(e.target)) {
+        e.preventDefault();
+        col.scrollTop += e.deltaY;
+      }
+      return; // allow internal About column scrolling until boundary
+    }
     e.preventDefault();
     wheelAcc += e.deltaY;
     clearTimeout(wheelTimer);
@@ -671,6 +720,7 @@ function initSceneControls() {
   window.addEventListener("touchend", (e) => {
     if (!isDesktopStage() || isTransitioning || isOverlayOpen()) return;
     const dy = touchY - e.changedTouches[0].clientY;
+    if (canAboutScrollInDir(dy)) return;
     if (Math.abs(dy) >= 40) transitionToScene(currentScene + (dy > 0 ? 1 : -1));
   }, { passive: true });
 
@@ -731,7 +781,7 @@ function buildAboutDebris() {
 
   const nodes = DEBRIS_LAYOUT.map((item) => {
     const wrap = document.createElement("div");
-    wrap.className = `debris-item debris-depth-${item.depth}`;
+    wrap.className = `debris-item debris-depth-${item.depth}${item.extraClass ? ` ${item.extraClass}` : ""}`;
     wrap.style.left = item.left;
     wrap.style.top = item.top;
     wrap.style.width = item.width;
@@ -864,52 +914,111 @@ function buildAccessibleProjectList() {
 }
 
 /* ==========================================================================
-   Dialogs: Know More Drawer, Index Directory, Project Viewer Modal
+   Scene 2: About Content, Stat Count-up & Project Deep-Link
    ========================================================================== */
-function buildKnowMoreDrawer() {
-  const drawer = document.getElementById("know-more-drawer");
-  const openBtn = document.getElementById("know-more-btn");
-  const closeBtn = document.getElementById("drawer-close");
-  const backdrop = document.getElementById("drawer-backdrop");
-  const linesUl = document.getElementById("drawer-lines");
-  const linksDiv = document.getElementById("drawer-links");
+let aboutStatsCounted = false;
 
-  ABOUT_COPY.dossierLines.forEach((line) => {
-    const li = document.createElement("li");
-    li.textContent = line;
-    linesUl.appendChild(li);
+function initAboutSection() {
+  document.getElementById("about-label").textContent = ABOUT.label;
+  document.getElementById("about-title").innerHTML = ABOUT.heading.replace("\n", "<br>");
+  document.getElementById("about-p1").textContent = ABOUT.paragraph1;
+
+  const p2 = document.getElementById("about-p2");
+  p2.textContent = "";
+  p2.append(document.createTextNode(ABOUT.paragraph2Before));
+  p2.append(createAboutProjectLink(ABOUT.link1));
+  p2.append(document.createTextNode(ABOUT.paragraph2Middle));
+  p2.append(createAboutProjectLink(ABOUT.link2));
+  p2.append(document.createTextNode(ABOUT.paragraph2After));
+
+  document.getElementById("about-now-main").textContent = ABOUT.nowMain;
+  document.getElementById("about-now-muted").textContent = ABOUT.nowMuted;
+
+  const statsEl = document.getElementById("about-stats");
+  statsEl.innerHTML = "";
+  ABOUT.stats.forEach((st) => {
+    const wrap = document.createElement("div");
+    wrap.className = "about-stat";
+    wrap.innerHTML = `
+      <dd class="about-stat-val" data-target="${st.target}" data-suffix="${st.suffix}">${st.target}${st.suffix}</dd>
+      <dt class="about-stat-lbl">${st.label}</dt>
+    `;
+    statsEl.appendChild(wrap);
   });
 
-  [
-    ["GitHub", SITE_CONFIG.links.github],
-    ["LinkedIn", SITE_CONFIG.links.linkedin],
-    ["Instagram", SITE_CONFIG.links.instagram],
-    ["Email", `mailto:${SITE_CONFIG.email}`],
-  ].forEach(([label, href]) => {
-    const a = document.createElement("a");
-    a.href = href;
-    if (!href.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
-    a.className = "text-link";
-    a.textContent = label;
-    linksDiv.appendChild(a);
+  const groupsEl = document.getElementById("about-expertise-groups");
+  groupsEl.innerHTML = "";
+  ABOUT.expertise.forEach((grp) => {
+    const row = document.createElement("div");
+    row.className = "expertise-group";
+    const lbl = document.createElement("span");
+    lbl.className = "expertise-group-label";
+    lbl.textContent = grp.group;
+
+    const ul = document.createElement("ul");
+    ul.className = "expertise-chips";
+    ul.setAttribute("aria-label", grp.group);
+    grp.items.forEach((item) => {
+      const li = document.createElement("li");
+      li.className = "expertise-chip";
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+
+    row.append(lbl, ul);
+    groupsEl.appendChild(row);
   });
 
-  const close = () => {
-    drawer.hidden = true;
-    document.body.classList.remove("is-locked");
-    openBtn.focus();
-  };
-
-  openBtn.addEventListener("click", () => {
-    drawer.hidden = false;
-    document.body.classList.add("is-locked");
-    closeBtn.focus();
+  const workBtn = document.getElementById("about-work-btn");
+  workBtn.textContent = ABOUT.ctaLabel;
+  workBtn.addEventListener("click", () => {
+    if (isDesktopStage()) transitionToScene(2);
+    else document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
   });
-  closeBtn.addEventListener("click", close);
-  backdrop.addEventListener("click", close);
-  document.addEventListener("keydown", (e) => {
-    if (!drawer.hidden && e.key === "Escape") close();
-    if (!drawer.hidden && e.key === "Tab") trapFocus(e, drawer);
+
+  updateAboutScrollMask();
+  window.addEventListener("resize", updateAboutScrollMask);
+}
+
+function createAboutProjectLink({ label, projectIndex }) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "about-proj-link";
+  btn.textContent = label;
+  btn.addEventListener("click", () => {
+    if (isDesktopStage()) {
+      transitionToScene(2);
+      setTimeout(() => openProjectModal(projectIndex, btn, true), 1450);
+    } else {
+      document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => openProjectModal(projectIndex, btn, false), 350);
+    }
+  });
+  return btn;
+}
+
+function updateAboutScrollMask() {
+  const col = document.getElementById("about-copy");
+  if (!col) return;
+  const scrollable = isDesktopStage() && col.scrollHeight > col.clientHeight + 2;
+  col.classList.toggle("is-scrollable", scrollable);
+}
+
+function animateAboutStatsOnce() {
+  if (aboutStatsCounted || prefersReduced()) return;
+  aboutStatsCounted = true;
+  document.querySelectorAll(".about-stat-val").forEach((el) => {
+    const target = Number(el.dataset.target);
+    const suffix = el.dataset.suffix || "";
+    const obj = { val: 0 };
+    if (typeof gsap !== "undefined") {
+      gsap.to(obj, {
+        val: target,
+        duration: 0.9,
+        ease: "power2.out",
+        onUpdate: () => { el.textContent = `${Math.round(obj.val)}${suffix}`; },
+      });
+    }
   });
 }
 

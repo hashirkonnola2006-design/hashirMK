@@ -235,15 +235,18 @@
     <!-- ======================================================================
          SCENE 2: ABOUT
          ====================================================================== -->
-    <section class="scene scene-about" id="about" data-scene="1" aria-labelledby="about-heading">
+    <section class="scene scene-about" id="about" data-scene="1" aria-labelledby="about-title">
       <picture class="plate-picture">
         <source type="image/avif" srcset="assets/img/about-plate-1280.avif 1280w, assets/img/about-plate-1920.avif 1920w, assets/img/about-plate-2560.avif 2560w, assets/img/about-plate-3840.avif 3840w" sizes="100vw">
         <source type="image/webp" srcset="assets/img/about-plate-1280.webp 1280w, assets/img/about-plate-1920.webp 1920w, assets/img/about-plate-2560.webp 2560w, assets/img/about-plate-3840.webp 3840w" sizes="100vw">
         <img src="assets/img/about-plate-1920.webp" alt="" class="plate-img plate-about" loading="lazy" decoding="async">
       </picture>
 
-      <!-- Multi-depth Floating Debris Parallax Layers -->
+      <!-- Multi-depth Floating Debris Parallax Layers (kept clear of text column) -->
       <div class="debris-field" id="debris-field" aria-hidden="true"></div>
+
+      <!-- Soft Scrim Behind About Text Column -->
+      <div class="about-scrim" aria-hidden="true"></div>
 
       <!-- Mobile-only About TV -->
       <div class="mobile-about-tv" aria-hidden="true">
@@ -278,18 +281,38 @@
         </div>
       </div>
 
-      <!-- Minimal Text Block on the Right -->
+      <!-- Editorial Content Column on the Right -->
       <div class="about-copy" id="about-copy">
-        <div class="about-eyebrow-row">
-          <span class="about-eyebrow">ABOUT ME</span>
-          <span class="about-rule" aria-hidden="true"></span>
+        <div class="about-block about-eyebrow-row">
+          <span class="about-eyebrow" id="about-label">ABOUT ME</span>
+          <span class="about-rule" id="about-rule" aria-hidden="true"></span>
         </div>
-        <h2 id="about-heading" class="about-heading">Hi, I'm<br>Hashir.</h2>
-        <p class="about-body" id="about-paragraph">
-          A B.Tech Computer Science student building real products with code, creativity and a bit of chaos.
-        </p>
-        <p class="about-meta" id="about-meta">FULL-STACK &middot; 12 LIVE PROJECTS &middot; BACKEND TO UI</p>
-        <button type="button" class="pill-btn" id="know-more-btn">Know More &rarr;</button>
+
+        <h2 id="about-title" class="about-heading about-block">Self-taught.<br>Always shipping.</h2>
+
+        <div class="about-block about-prose">
+          <p class="about-body" id="about-p1"></p>
+          <p class="about-body" id="about-p2"></p>
+        </div>
+
+        <div class="about-block about-now" id="about-now">
+          <span class="about-eyebrow">NOW</span>
+          <div class="about-now-copy">
+            <p class="about-now-main" id="about-now-main"></p>
+            <p class="about-now-muted" id="about-now-muted"></p>
+          </div>
+        </div>
+
+        <dl class="about-block about-stats" id="about-stats"></dl>
+
+        <div class="about-block about-expertise" id="about-expertise">
+          <p class="about-eyebrow">TECHNICAL EXPERTISE</p>
+          <div class="expertise-groups" id="about-expertise-groups"></div>
+        </div>
+
+        <div class="about-block about-cta-wrap">
+          <button type="button" class="pill-btn about-cta" id="about-work-btn">See my work &rarr;</button>
+        </div>
       </div>
     </section>
 
@@ -412,18 +435,6 @@
       </div>
     </section>
   </main>
-
-  <!-- Minimal Slide-In Panel ("Know More →") -->
-  <div class="drawer" id="know-more-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
-    <div class="drawer-backdrop" id="drawer-backdrop"></div>
-    <aside class="drawer-panel">
-      <button type="button" class="icon-btn drawer-close" id="drawer-close" aria-label="Close panel">&times;</button>
-      <p class="about-eyebrow">DOSSIER</p>
-      <h3 id="drawer-title" class="drawer-title" data-site-name>Hashir Muhiyudheen Konnola</h3>
-      <ul class="drawer-lines" id="drawer-lines"></ul>
-      <div class="drawer-links" id="drawer-links"></div>
-    </aside>
-  </div>
 
   <!-- Index Overlay ("My Projects / View All →") -->
   <div class="index-overlay" id="index-overlay" role="dialog" aria-modal="true" aria-labelledby="index-overlay-title" hidden>
