@@ -341,18 +341,30 @@ export function createParticleEngine(canvas, reducedMotion) {
 
 export function createSpiderSense(svgEl, reducedMotion) {
   if (!svgEl) return { show() {}, hide() {}, flashFast() {} };
-  const paths = Array.from(svgEl.querySelectorAll(".sense-path"));
+  const paths = Array.from(document.querySelectorAll("#tingle-rays .sense-path"));
+  const mobSvg = document.querySelector(".mobile-sense-svg");
   let timer = null;
+  let burstTimeout = null;
 
   function jitterOnce(fast = false) {
+    if (fast) {
+      svgEl.classList.add("is-tingling");
+      if (mobSvg) mobSvg.classList.add("is-tingling");
+      clearTimeout(burstTimeout);
+      burstTimeout = setTimeout(() => {
+        svgEl.classList.remove("is-tingling");
+        if (mobSvg) mobSvg.classList.remove("is-tingling");
+      }, 520);
+    }
+
     paths.forEach((p, idx) => {
-      const delay = fast ? idx * 18 : Math.random() * 500;
+      const delay = fast ? idx * 14 : Math.random() * 220;
       setTimeout(() => {
-        const show = fast || Math.random() > 0.35;
-        p.style.transition = `stroke-dashoffset ${fast ? 110 : 220}ms ease, transform ${fast ? 90 : 180}ms ease`;
-        p.style.strokeDashoffset = show ? "0" : "85";
+        const show = fast || Math.random() > 0.22;
+        p.style.transition = `stroke-dashoffset ${fast ? 80 : 150}ms cubic-bezier(0.22, 1, 0.36, 1), transform ${fast ? 70 : 140}ms steps(2, end)`;
+        p.style.strokeDashoffset = show ? "0" : "260";
         p.style.transform = show
-          ? `translate(${((Math.random() - 0.5) * (fast ? 8 : 4)).toFixed(1)}px, ${((Math.random() - 0.5) * (fast ? 8 : 4)).toFixed(1)}px)`
+          ? `translate(${((Math.random() - 0.5) * (fast ? 9 : 4.5)).toFixed(1)}px, ${((Math.random() - 0.5) * (fast ? 9 : 4.5)).toFixed(1)}px)`
           : "none";
       }, delay);
     });
@@ -365,14 +377,19 @@ export function createSpiderSense(svgEl, reducedMotion) {
         paths.forEach((p) => { p.style.strokeDashoffset = "0"; });
         return;
       }
-      jitterOnce(false);
+      jitterOnce(true);
       clearInterval(timer);
-      timer = setInterval(() => jitterOnce(false), 1400);
+      timer = setInterval(() => {
+        const dangerBurst = Math.random() > 0.55;
+        jitterOnce(dangerBurst);
+      }, 950);
     },
     hide() {
       clearInterval(timer);
+      clearTimeout(burstTimeout);
+      svgEl.classList.remove("is-tingling");
       svgEl.style.opacity = "0";
-      paths.forEach((p) => { p.style.strokeDashoffset = "85"; });
+      paths.forEach((p) => { p.style.strokeDashoffset = "260"; });
     },
     flashFast() {
       svgEl.style.opacity = "1";

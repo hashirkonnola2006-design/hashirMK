@@ -21,6 +21,27 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Shared Chromatic Spider-Sense Ray Sprite -->
+  <svg width="0" height="0" class="sr-only" aria-hidden="true">
+    <defs>
+      <filter id="sense-glow" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="3.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <g id="tingle-rays" fill="none" stroke-linecap="round" stroke-linejoin="miter">
+        <path class="sense-path" d="M 10,164 L -26,156 L -40,172 L -76,160 L -96,178 L -134,168"/>
+        <path class="sense-path" d="M 14,106 L -22,90 L -32,108 L -70,84 L -88,104 L -128,76"/>
+        <path class="sense-path" d="M 32,48 L -2,22 L -18,38 L -52,8 L -72,24 L -114,-14"/>
+        <path class="sense-path" d="M 90,14 L 72,-26 L 50,-16 L 30,-60 L 10,-50 L -18,-102"/>
+        <path class="sense-path" d="M 196,4 L 186,-42 L 210,-50 L 192,-102 L 218,-112 L 200,-162"/>
+        <path class="sense-path" d="M 304,14 L 322,-26 L 344,-14 L 364,-60 L 386,-48 L 416,-98"/>
+        <path class="sense-path" d="M 366,48 L 400,22 L 414,38 L 450,10 L 468,26 L 510,-8"/>
+        <path class="sense-path" d="M 386,106 L 422,90 L 434,108 L 472,84 L 490,102 L 530,74"/>
+        <path class="sense-path" d="M 390,164 L 426,156 L 440,172 L 474,160 L 494,176 L 530,168"/>
+      </g>
+    </defs>
+  </svg>
+
   <!-- Initial "TUNING IN..." Loader -->
   <div class="tuning-loader" id="tuning-loader" role="status" aria-live="polite">
     <p class="tuning-text">TUNING IN...</p>
@@ -165,25 +186,16 @@
           </div>
         </div>
 
-        <!-- Blue Spider-Sense Squiggly Lines (visible during transitions & About) -->
-        <svg class="spider-sense-svg" id="spider-sense-svg" viewBox="-120 -120 640 560" aria-hidden="true">
-          <defs>
-            <filter id="sense-glow" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="4" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <g class="sense-strokes" filter="url(#sense-glow)" fill="none" stroke="var(--sense)" stroke-width="3.2" stroke-linecap="round">
-            <path class="sense-path" d="M 80,-24 Q 72,-54 92,-76"/>
-            <path class="sense-path" d="M 300,-22 Q 326,-48 348,-66"/>
-            <path class="sense-path" d="M 382,42 Q 424,22 456,36"/>
-            <path class="sense-path" d="M 412,130 Q 452,118 486,138"/>
-            <path class="sense-path" d="M 396,222 Q 436,248 468,272"/>
-            <path class="sense-path" d="M -22,68 Q -64,52 -94,68"/>
-            <path class="sense-path" d="M -28,158 Q -74,166 -98,192"/>
-            <path class="sense-path" d="M -12,238 Q -52,262 -76,288"/>
-            <path class="sense-path" d="M 190,-38 Q 202,-72 216,-94"/>
-            <path class="sense-path" d="M 190,348 Q 204,378 194,408"/>
+        <!-- Chromatic Spider-Sense / Danger Tingle Rays -->
+        <svg class="spider-sense-svg" id="spider-sense-svg" viewBox="-160 -175 720 600" aria-hidden="true">
+          <g class="sense-layer sense-layer-red" filter="url(#sense-glow)">
+            <use href="#tingle-rays" stroke="var(--led)" stroke-width="5.5" transform="translate(-5, -3)"/>
+          </g>
+          <g class="sense-layer sense-layer-blue" filter="url(#sense-glow)">
+            <use href="#tingle-rays" stroke="var(--sense)" stroke-width="5.5" transform="translate(5, 3)"/>
+          </g>
+          <g class="sense-layer sense-layer-core">
+            <use href="#tingle-rays" stroke="#ffffff" stroke-width="2.6"/>
           </g>
         </svg>
       </div>
@@ -250,16 +262,15 @@
 
       <!-- Mobile-only About TV -->
       <div class="mobile-about-tv" aria-hidden="true">
-        <svg class="spider-sense-svg mobile-sense-svg" viewBox="-120 -120 640 560" aria-hidden="true">
-          <g fill="none" stroke="var(--sense)" stroke-width="3.6" stroke-linecap="round">
-            <path class="mobile-sense-path" d="M 80,-24 Q 72,-54 92,-76"/>
-            <path class="mobile-sense-path" d="M 300,-22 Q 326,-48 348,-66"/>
-            <path class="mobile-sense-path" d="M 382,42 Q 424,22 456,36"/>
-            <path class="mobile-sense-path" d="M 412,130 Q 452,118 486,138"/>
-            <path class="mobile-sense-path" d="M -22,68 Q -64,52 -94,68"/>
-            <path class="mobile-sense-path" d="M -28,158 Q -74,166 -98,192"/>
-            <path class="mobile-sense-path" d="M -12,238 Q -52,262 -76,288"/>
-            <path class="mobile-sense-path" d="M 190,-38 Q 202,-72 216,-94"/>
+        <svg class="spider-sense-svg mobile-sense-svg" viewBox="-160 -175 720 600" aria-hidden="true">
+          <g class="sense-layer sense-layer-red">
+            <use href="#tingle-rays" stroke="var(--led)" stroke-width="6" transform="translate(-5, -3)"/>
+          </g>
+          <g class="sense-layer sense-layer-blue">
+            <use href="#tingle-rays" stroke="var(--sense)" stroke-width="6" transform="translate(5, 3)"/>
+          </g>
+          <g class="sense-layer sense-layer-core">
+            <use href="#tingle-rays" stroke="#ffffff" stroke-width="2.8"/>
           </g>
         </svg>
         <img src="assets/img/tv-hero-1200.webp" alt="" class="tv-cutout-img" loading="lazy" decoding="async">

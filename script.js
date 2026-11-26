@@ -781,6 +781,7 @@ function initMobileScrollObservers() {
           updateActiveChrome(idx);
           if (idx === 1 && !mobileAboutStarted) {
             mobileAboutStarted = true;
+            spiderSense.show();
             startAboutScreenCycle(document.getElementById("mobile-tv-ui-about"));
           }
         }
