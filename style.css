@@ -1091,16 +1091,16 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   background-color: var(--bg);
 }
 
 .pile-stage {
   position: relative;
-  width: min(100vw, calc(100vh * 16 / 9));
+  flex-shrink: 0;
+  width: max(100vw, calc(100vh * 16 / 9));
   aspect-ratio: 16 / 9;
   transform-origin: center center;
-  -webkit-mask-image: radial-gradient(ellipse 96% 94% at 50% 50%, #000 72%, transparent 100%);
-  mask-image: radial-gradient(ellipse 96% 94% at 50% 50%, #000 72%, transparent 100%);
 }
 
 .pile-plate-pic,
@@ -1175,6 +1175,21 @@ textarea {
   cursor: pointer;
   transform: rotate(-10deg);
   transition: transform 240ms var(--ease);
+}
+
+.pile-landing-tv .tv-ui {
+  padding: 5% 6%;
+}
+
+.pile-landing-tv .tv-projects-label {
+  font-size: clamp(0.68rem, 0.95vw, 1.05rem);
+  margin-bottom: 0.35rem;
+  white-space: nowrap;
+}
+
+.pile-landing-tv .tv-explore-btn {
+  padding: 0.22rem 0.65rem;
+  font-size: clamp(0.55rem, 0.68vw, 0.72rem);
 }
 
 .pile-landing-tv:hover {
