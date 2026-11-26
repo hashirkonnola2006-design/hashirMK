@@ -215,12 +215,38 @@ async function loadJsonCoords() {
 
 function getHeroTvRect() {
   const el = isDesktopStage()
-    ? document.getElementById("tv-actor")
+    ? document.getElementById("tv-actor-3d")
     : document.querySelector(".mobile-hero-tv");
   const canvas = document.getElementById("web-strands-canvas");
   if (!el || !canvas) return null;
-  const r = el.getBoundingClientRect();
   const c = canvas.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+
+  // Compute exact rotated TV corner positions when using desktop pendulum transform
+  if (isDesktopStage()) {
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    const cx = r.left + r.width * 0.5 - c.left;
+    const cy = r.top + r.height * 0.5 - c.top;
+    const m = new DOMMatrix(getComputedStyle(el).transform);
+    const angle = Math.atan2(m.b, m.a);
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    return {
+      left: r.left - c.left,
+      top: r.top - c.top,
+      width: r.width,
+      height: r.height,
+      mapPoint(fx, fy) {
+        const lx = (fx - 0.5) * w;
+        const ly = (fy - 0.5) * h;
+        return {
+          x: cx + lx * cos - ly * sin,
+          y: cy + lx * sin + ly * cos,
+        };
+      },
+    };
+  }
   return { left: r.left - c.left, top: r.top - c.top, width: r.width, height: r.height };
 }
 
@@ -354,15 +380,17 @@ function startTvSway(sceneIdx) {
   if (!actor3d) return;
 
   if (sceneIdx === 0) {
+    // Ceiling-pivoted pendulum swing (no vertical zero-G floating bob)
+    gsap.set(actor3d, { transformOrigin: "50% -180%", y: 0 });
     swayTween = gsap.to(actor3d, {
-      rotationZ: 1.4,
-      y: 6,
-      duration: 3.4,
+      rotationZ: 0.8,
+      duration: 4.8,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
     });
   } else if (sceneIdx === 1) {
+    gsap.set(actor3d, { transformOrigin: "50% 50%" });
     swayTween = gsap.to(actor3d, {
       rotationZ: -15,
       rotationY: 20,
@@ -491,7 +519,7 @@ function runT1(isReverse, rate) {
   if (!isReverse) {
     tl.call(() => { webStrands.setTension(2.4); spiderSense.flashFast(); }, null, 0)
       .to(actor3d, { x: 4, duration: 0.05, repeat: 5, yoyo: true }, 0)
-      .call(() => { webStrands.snap(); }, null, 0.32)
+      .call(() => { webStrands.snap(); gsap.set(actor3d, { transformOrigin: "50% 50%" }); }, null, 0.32)
       .to(actor, { top: heroPose.top + 38, duration: 0.25, ease: "power2.in" }, 0.35)
       .to(blurFx, { opacity: 0.45, duration: 0.35 }, 0.5)
       .to(heroSec, { scale: 1.28, opacity: 0, duration: 0.95, ease: "power3.inOut" }, 0.5)

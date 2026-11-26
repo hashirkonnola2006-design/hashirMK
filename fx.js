@@ -2,7 +2,7 @@
    FX Module: Verlet Web Strands, Dust Particles, Impact Puff & Spider-Sense
    ========================================================================== */
 
-export function createWebStrands(canvas, getTvRect) {
+export function createWebStrands(canvas, getTvTransform) {
   if (!canvas) return { start() {}, stop() {}, setTension() {}, snap() {}, reset() {} };
   const ctx = canvas.getContext("2d");
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -15,19 +15,25 @@ export function createWebStrands(canvas, getTvRect) {
   let snapped = false;
   let snapAlpha = 1;
 
-  // 7 anchor points tucked cleanly onto the TV's upper bezel corners/edge
+  // Two load-bearing corner clusters + secondary cross-bracing strands (taut, sag ~0)
+  // Coordinates: topX (viewport width fraction at ceiling y=-8), tvX/tvY (local TV fractions)
   const STRAND_SPECS = [
-    { topX: 0.34, tvX: 0.08, tvY: 0.06, sag: 8 },
-    { topX: 0.38, tvX: 0.14, tvY: 0.04, sag: 4 },
-    { topX: 0.43, tvX: 0.24, tvY: 0.03, sag: 6 },
-    { topX: 0.50, tvX: 0.52, tvY: 0.04, sag: 9 },
-    { topX: 0.57, tvX: 0.78, tvY: 0.03, sag: 5 },
-    { topX: 0.62, tvX: 0.87, tvY: 0.05, sag: 4 },
-    { topX: 0.66, tvX: 0.92, tvY: 0.07, sag: 7 },
+    // Left corner load-bearing cluster
+    { topX: 0.355, tvX: 0.045, tvY: 0.075, sag: 0.2, width: 1.7, alpha: 0.78, cluster: "L" },
+    { topX: 0.372, tvX: 0.075, tvY: 0.055, sag: 0.0, width: 1.35, alpha: 0.68, cluster: "L" },
+    { topX: 0.415, tvX: 0.115, tvY: 0.048, sag: 0.4, width: 1.15, alpha: 0.58, cluster: "L" },
+    { topX: 0.390, tvX: 0.195, tvY: 0.045, sag: 0.6, width: 0.9,  alpha: 0.44, cluster: "L" },
+    // Center crossed tension brace
+    { topX: 0.475, tvX: 0.145, tvY: 0.052, sag: 0.8, width: 0.85, alpha: 0.38, cluster: "M" },
+    { topX: 0.525, tvX: 0.855, tvY: 0.052, sag: 0.8, width: 0.85, alpha: 0.38, cluster: "M" },
+    // Right corner load-bearing cluster
+    { topX: 0.605, tvX: 0.805, tvY: 0.045, sag: 0.5, width: 0.9,  alpha: 0.42, cluster: "R" },
+    { topX: 0.585, tvX: 0.885, tvY: 0.048, sag: 0.3, width: 1.15, alpha: 0.54, cluster: "R" },
+    { topX: 0.628, tvX: 0.925, tvY: 0.055, sag: 0.0, width: 1.35, alpha: 0.64, cluster: "R" },
+    { topX: 0.645, tvX: 0.955, tvY: 0.075, sag: 0.2, width: 1.65, alpha: 0.72, cluster: "R" },
   ].map((s) => ({
     ...s,
-    nodes: Array.from({ length: 16 }, () => ({ x: 0, y: 0, ox: 0, oy: 0 })),
-    snappedAt: 0,
+    nodes: Array.from({ length: 14 }, () => ({ x: 0, y: 0, ox: 0, oy: 0 })),
   }));
 
   function resize() {
@@ -38,18 +44,22 @@ export function createWebStrands(canvas, getTvRect) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
+  function mapTvPoint(tv, fx, fy) {
+    if (tv.mapPoint) return tv.mapPoint(fx, fy);
+    return { x: tv.left + tv.width * fx, y: tv.top + tv.height * fy };
+  }
+
   function initNodes() {
-    const tv = getTvRect();
+    const tv = getTvTransform();
     if (!tv) return;
     STRAND_SPECS.forEach((st) => {
       const x0 = width * st.topX;
-      const y0 = -10;
-      const x1 = tv.left + tv.width * st.tvX;
-      const y1 = tv.top + tv.height * st.tvY;
+      const y0 = -8;
+      const p1 = mapTvPoint(tv, st.tvX, st.tvY);
       st.nodes.forEach((n, idx) => {
         const t = idx / (st.nodes.length - 1);
-        n.x = x0 + (x1 - x0) * t;
-        n.y = y0 + (y1 - y0) * t;
+        n.x = x0 + (p1.x - x0) * t;
+        n.y = y0 + (p1.y - y0) * t;
         n.ox = n.x;
         n.oy = n.y;
       });
@@ -61,24 +71,25 @@ export function createWebStrands(canvas, getTvRect) {
     rafId = requestAnimationFrame(tick);
     if (document.hidden) return;
 
-    const tv = getTvRect();
+    const tv = getTvTransform();
     ctx.clearRect(0, 0, width, height);
     if (!tv || snapAlpha <= 0.01) return;
 
     const t = now * 0.001;
-    if (snapped) snapAlpha = Math.max(0, snapAlpha - 0.045);
+    if (snapped) snapAlpha = Math.max(0, snapAlpha - 0.05);
 
     STRAND_SPECS.forEach((st, idx) => {
       const x0 = width * st.topX;
-      const y0 = -10;
-      const x1 = tv.left + tv.width * st.tvX;
-      const y1 = tv.top + tv.height * st.tvY;
+      const y0 = -8;
+      const p1 = mapTvPoint(tv, st.tvX, st.tvY);
+      const x1 = p1.x;
+      const y1 = p1.y;
 
       const nodes = st.nodes;
       nodes[0].x = x0;
       nodes[0].y = y0;
 
-      // Verlet integration
+      // Verlet integration (high tension, crisp minimal vibration)
       for (let i = 1; i < nodes.length; i += 1) {
         if (!snapped && i === nodes.length - 1) {
           nodes[i].x = x1;
@@ -86,20 +97,22 @@ export function createWebStrands(canvas, getTvRect) {
           continue;
         }
         const n = nodes[i];
-        const vx = (n.x - n.ox) * 0.82;
-        const vy = (n.y - n.oy) * 0.82;
+        const vx = (n.x - n.ox) * 0.78;
+        const vy = (n.y - n.oy) * 0.78;
         n.ox = n.x;
         n.oy = n.y;
         const tNorm = i / (nodes.length - 1);
-        const vib = Math.sin(t * 2.4 + idx * 0.9 + tNorm * 3.1) * 0.04 * tension * Math.sin(tNorm * Math.PI);
+        const vib = snapped
+          ? Math.sin(t * 14 + idx + i) * 1.4
+          : Math.sin(t * 2.2 + idx * 1.1 + tNorm * 3.14) * 0.025 * (tension - 1) * Math.sin(tNorm * Math.PI);
         n.x += vx + vib;
-        n.y += vy + (snapped ? -2.2 : 0.16);
+        n.y += vy + (snapped ? -2.8 : 0.04);
       }
 
-      // Distance constraints
+      // High-stiffness distance constraints so load-bearing cables stay taut
       const totalLen = Math.hypot(x1 - x0, y1 - y0) + st.sag;
       const segLen = totalLen / (nodes.length - 1);
-      for (let iter = 0; iter < 8; iter += 1) {
+      for (let iter = 0; iter < 14; iter += 1) {
         for (let i = 0; i < nodes.length - 1; i += 1) {
           const a = nodes[i];
           const b = nodes[i + 1];
@@ -115,26 +128,73 @@ export function createWebStrands(canvas, getTvRect) {
         }
       }
 
-      // Draw translucent silk strand + glistening highlight + anchor blob
+      // Top-left spotlight sheen gradient along each taut cable
+      const grad = ctx.createLinearGradient(x0, y0, x1, y1);
+      const leftBoost = st.cluster === "L" ? 1.0 : st.cluster === "M" ? 0.85 : 0.75;
+      grad.addColorStop(0, `rgba(245, 248, 255, ${(st.alpha * leftBoost).toFixed(2)})`);
+      grad.addColorStop(0.55, `rgba(205, 216, 232, ${(st.alpha * 0.72 * leftBoost).toFixed(2)})`);
+      grad.addColorStop(1, `rgba(175, 188, 206, ${(st.alpha * 0.82).toFixed(2)})`);
+
       ctx.save();
-      ctx.globalAlpha = 0.52 * snapAlpha;
-      ctx.strokeStyle = "rgba(232, 240, 255, 0.85)";
-      ctx.lineWidth = idx % 2 === 0 ? 1.35 : 0.95;
+      ctx.globalAlpha = snapAlpha;
+      ctx.lineCap = "round";
+
+      // Subtle dark backing stroke for physical depth against fog
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.55)";
+      ctx.lineWidth = st.width + 1.4;
       ctx.beginPath();
       ctx.moveTo(nodes[0].x, nodes[0].y);
-      for (let i = 1; i < nodes.length; i += 1) {
-        ctx.lineTo(nodes[i].x, nodes[i].y);
-      }
+      for (let i = 1; i < nodes.length; i += 1) ctx.lineTo(nodes[i].x, nodes[i].y);
       ctx.stroke();
 
-      if (!snapped) {
-        ctx.fillStyle = "rgba(255, 255, 255, 0.72)";
+      // Main silver-white silk strand
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = st.width;
+      ctx.beginPath();
+      ctx.moveTo(nodes[0].x, nodes[0].y);
+      for (let i = 1; i < nodes.length; i += 1) ctx.lineTo(nodes[i].x, nodes[i].y);
+      ctx.stroke();
+
+      // Webbing grip tendrils wrapping down onto the TV top bezel (no floating dots)
+      if (!snapped && st.cluster !== "M") {
+        const dir = st.cluster === "L" ? 1 : -1;
+        const grip1 = mapTvPoint(tv, st.tvX + dir * 0.02, st.tvY + 0.065);
+        const grip2 = mapTvPoint(tv, st.tvX - dir * 0.015, st.tvY + 0.085);
+        ctx.strokeStyle = `rgba(220, 230, 245, ${(st.alpha * 0.65).toFixed(2)})`;
+        ctx.lineWidth = 0.85;
         ctx.beginPath();
-        ctx.arc(x1, y1, 2.2, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(x1, y1);
+        ctx.quadraticCurveTo(x1 + dir * 4, y1 + 8, grip1.x, grip1.y);
+        ctx.moveTo(x1, y1);
+        ctx.quadraticCurveTo(x1 - dir * 3, y1 + 10, grip2.x, grip2.y);
+        ctx.stroke();
       }
       ctx.restore();
     });
+
+    // Subtle horizontal cobweb cross-filaments linking each corner bundle
+    if (!snapped) {
+      ctx.save();
+      ctx.globalAlpha = 0.34 * snapAlpha;
+      ctx.strokeStyle = "rgba(225, 235, 250, 0.7)";
+      ctx.lineWidth = 0.7;
+      const pairs = [
+        [0, 1, 0.72], [1, 2, 0.84], [2, 3, 0.88],
+        [6, 7, 0.86], [7, 8, 0.78], [8, 9, 0.70],
+        [0, 2, 0.91], [7, 9, 0.90],
+      ];
+      pairs.forEach(([aIdx, bIdx, tFrac]) => {
+        const nIdx = Math.min(13, Math.floor(tFrac * 13));
+        const a = STRAND_SPECS[aIdx].nodes[nIdx];
+        const b = STRAND_SPECS[bIdx].nodes[nIdx];
+        if (!a || !b) return;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.quadraticCurveTo((a.x + b.x) * 0.5, (a.y + b.y) * 0.5 + 3, b.x, b.y);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
   }
 
   window.addEventListener("resize", resize);
